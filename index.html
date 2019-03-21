@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Hello, AR Cube!</title>
+    <!-- include three.js library -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.min.js'></script>
+    <!-- include jsartookit -->
+    <script src="artoolkit.min.js"></script>
+    <script src="artoolkit.api.js"></script>
+    <!-- include threex.artoolkit -->
+    <script src="threex-1.js"></script>
+    <script src="threex-2.js"></script>
+    <script src="threex-3.js"></script>
+    <script src="threex-4.js"></script>
+    <script src="threex-5.js"></script>
+    <script src="threex-6.js"></script>
+</head>
+
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+
+    <!-- 
+  Example created by Lee Stemkoski: https://github.com/stemkoski
+  Based on the AR.js library and examples created by Jerome Etienne: https://github.com/jeromeetienne/AR.js/
+-->
+
+    <script>
+
+        var scene, camera, renderer, clock, deltaTime, totalTime;
+
+        var arToolkitSource, arToolkitContext;
+
+        var markerRoot1, markerRoot2;
+
+        var mesh1;
+
+        initialize();
+        animate();
+
+        function initialize() {
+            scene = new THREE.Scene();
+
+            let ambientLight = new THREE.AmbientLight(0xcccccc, 0.5);
+            scene.add(ambientLight);
+
+            camera = new THREE.Camera();
+            scene.add(camera);
+
+            renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: true
+            });
+            renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+            renderer.setSize(640, 480);
+            renderer.domElement.style.position = 'absolute'
+            renderer.domElement.style.top = '0px'
+            renderer.domElement.style.left = '0px'
+            document.body.appendChild(renderer.domElement);
+
+            clock = new THREE.Clock();
+            deltaTime = 0;
+            totalTime = 0;
+
+            ////////////////////////////////////////////////////////////
+            // setup arToolkitSource
+            ////////////////////////////////////////////////////////////
+
+            arToolkitSource = new THREEx.ArToolkitSource({
+                sourceType: 'webcam',
+            });
+
+            function onResize() {
+                arToolkitSource.onResize()
+                arToolkitSource.copySizeTo(renderer.domElement)
+                if (arToolkitContext.arController !== null) {
+                    arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
+                }
+            }
+
+            arToolkitSource.init(function onReady() {
+                onResize()
+            });
+
+            // handle resize event
+            window.addEventListener('resize', function () {
+                onResize()
+            });
+
+            ////////////////////////////////////////////////////////////
+            // setup arToolkitContext
+            ////////////////////////////////////////////////////////////	
+
+            // create atToolkitContext
+            arToolkitContext = new THREEx.ArToolkitContext({
+                cameraParametersUrl: 'camera_para.dat',
+                detectionMode: 'mono'
+            });
+
+            // copy projection matrix to camera when initialization complete
+            arToolkitContext.init(function onCompleted() {
+                camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+            });
+
+            ////////////////////////////////////////////////////////////
+            // setup markerRoots
+            ////////////////////////////////////////////////////////////
+
+            // build markerControls
+            markerRoot1 = new THREE.Group();
+            scene.add(markerRoot1);
+            let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
+                type: 'pattern', patternUrl: "hiro.patt",
+            })
+
+            let geometry1 = new THREE.CubeGeometry(1, 1, 1);
+            var txt_geom;
+            var loader = new THREE.FontLoader();
+
+            loader.load('font.json', function (font) {
+
+                txt_geom = new THREE.TextGeometry('Hello World', {
+                    font: font,
+                    size: 80,
+                    height: 1,
+                    curveSegments: 12,
+                    bevelEnabled: true,
+                    bevelThickness: 10,
+                    bevelSize: 8,
+                    bevelSegments: 5
+                });
+                let material1 = new THREE.MeshNormalMaterial({
+                    transparent: true,
+                    opacity: 0.5,
+                    side: THREE.DoubleSide
+                });
+
+                txt_geom.computeBoundingBox();
+                txt_geom.computeVertexNormals();
+
+
+
+                var center = new THREE.Vector3();
+                center.x = (txt_geom.boundingBox.max.x - txt_geom.boundingBox.min.x) / 2
+                // center.y	= (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2
+                center.z = (txt_geom.boundingBox.max.z - txt_geom.boundingBox.min.z) / 2
+
+                txt_geom = new THREE.BufferGeometry().fromGeometry(txt_geom);
+
+                // create a mesh with it
+                //var material = new THREE.MeshNormalMaterial()
+                mesh = new THREE.Mesh(txt_geom, material1)
+                mesh.position.y = 0.5;
+                mesh.scale.set(curscale, curscale, curscale)
+                mesh.rotation.x = -1.56;
+                //mesh.position.x = - center.x
+                //mesh.position.z = -center.z
+
+
+
+
+
+                markerRoot1.add(mesh);
+            });
+
+        }
+
+
+        function update() {
+            // update artoolkit on every frame
+            if (arToolkitSource.ready !== false)
+                arToolkitContext.update(arToolkitSource.domElement);
+        }
+
+
+        function render() {
+            renderer.render(scene, camera);
+        }
+
+
+        function animate() {
+            requestAnimationFrame(animate);
+            deltaTime = clock.getDelta();
+            totalTime += deltaTime;
+            update();
+            render();
+        }
+        var mesh;
+        var curscale = 0.01
+        function scaleDown() {
+            console.log(mesh.rotation)
+            curscale -= 0.001
+            mesh.scale.set(curscale, curscale, curscale)
+        }
+        window.onkeydown = function (e) {
+            if (e.key == "ArrowDown") {
+                scaleDown()
+            }
+        }
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "museum-prototype",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Theo Dedeken",
+  "license": "MIT",
+  "dependencies": {
+    "jsartoolkit": "0.0.0",
+    "threex": "^1.0.0"
+  }
+}
