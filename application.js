@@ -84,9 +84,9 @@ function initialize() {
     markerRoot1 = new THREE.Group();
     scene.add(markerRoot1);
     markerRoot2 = new THREE.Group();
-    scene.add(markerRoot1);
+    scene.add(markerRoot2);
     markerRoot3 = new THREE.Group();
-    scene.add(markerRoot1);
+    scene.add(markerRoot3);
 
     let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
         type: 'barcode', barcodeValue: 0,
