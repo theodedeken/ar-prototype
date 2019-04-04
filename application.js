@@ -3,7 +3,7 @@ var scene, camera, renderer, clock, deltaTime, totalTime;
 
 var arToolkitSource, arToolkitContext;
 
-var markerRoot1, markerRoot2;
+var markerRoot1, markerRoot2, markerRoot3;
 
 var mesh1;
 
@@ -83,21 +83,40 @@ function initialize() {
 
     markerRoot1 = new THREE.Group();
     scene.add(markerRoot1);
+    markerRoot2 = new THREE.Group();
+    scene.add(markerRoot1);
+    markerRoot3 = new THREE.Group();
+    scene.add(markerRoot1);
 
-    /*let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
+    let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
         type: 'barcode', barcodeValue: 0,
     })
-    */
-    let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
-        type: 'pattern', patternUrl: "hiro.patt",
+
+    let markerControls2 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot2, {
+        type: 'barcode', barcodeValue: 1,
     })
 
+    let markerControls3 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot3, {
+        type: 'barcode', barcodeValue: 2,
+    })
+    /*
+    let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
+        type: 'pattern', patternUrl: "hiro.patt",
+    })*/
+
+    createItem(markerRoot1, data[0]);
+    createItem(markerRoot2, data[1]);
+    createItem(markerRoot3, data[2]);
+
+}
+
+function createItem(markerRoot, item) {
     var title_geom;
     var loader = new THREE.FontLoader();
 
     loader.load('font.json', function (font) {
 
-        title_geom = new THREE.TextGeometry(data[0].title, {
+        title_geom = new THREE.TextGeometry(item.title, {
             font: font,
             size: .4,
             height: .05,
@@ -117,7 +136,6 @@ function initialize() {
 
         var center = new THREE.Vector3();
         center.x = (title_geom.boundingBox.max.x - title_geom.boundingBox.min.x) / 2
-        // center.y	= (geometry.boundingBox.max.y - geometry.boundingBox.min.y) / 2
         center.z = (title_geom.boundingBox.max.z - title_geom.boundingBox.min.z) / 2
 
         title_geom = new THREE.BufferGeometry().fromGeometry(title_geom);
@@ -129,7 +147,7 @@ function initialize() {
         title_mesh.position.z = center.z;
 
         body_mesh = new TextWrapper().Wrap({
-            string: data[1].description,
+            string: item.description,
             size: .08,
             font: font,
             color: 0x000000,
@@ -149,8 +167,8 @@ function initialize() {
 
 
 
-        markerRoot1.add(title_mesh);
-        markerRoot1.add(body_mesh);
+        markerRoot.add(title_mesh);
+        markerRoot.add(body_mesh);
 
         var geometry = new THREE.PlaneGeometry(5, 5, 32);
         var material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
@@ -159,9 +177,8 @@ function initialize() {
         plane.position.x = 2;
         plane.position.z = 2;
 
-        markerRoot1.add(plane)
+        markerRoot.add(plane)
     });
-
 }
 
 
