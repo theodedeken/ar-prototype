@@ -66,7 +66,8 @@ function initialize() {
     // create atToolkitContext
     arToolkitContext = new THREEx.ArToolkitContext({
         cameraParametersUrl: 'camera_para.dat',
-        detectionMode: 'mono'
+        detectionMode: "mono_and_matrix",
+        matrixCodeType: "3x3",
     });
 
     // copy projection matrix to camera when initialization complete
@@ -170,12 +171,13 @@ function createItem(markerRoot, item) {
         markerRoot.add(title_mesh);
         markerRoot.add(body_mesh);
 
-        var geometry = new THREE.PlaneGeometry(5, 5, 32);
+
+        var geometry = new THREE.PlaneGeometry(4, 4, 32);
         var material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
         var plane = new THREE.Mesh(geometry, material);
         plane.rotation.x = -1.56;
-        plane.position.x = 2;
-        plane.position.z = 2;
+        plane.position.x = 1.5;
+        plane.position.z = 1;
 
         markerRoot.add(plane)
     });
