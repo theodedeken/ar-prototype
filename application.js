@@ -26,7 +26,7 @@ function initialize() {
         alpha: true
     });
     renderer.setClearColor(new THREE.Color('lightgrey'), 0)
-    renderer.setSize(640, 480);
+    renderer.setSize(960, 720);
     renderer.domElement.style.position = 'absolute'
     renderer.domElement.style.top = '0px'
     renderer.domElement.style.left = '0px'
@@ -114,13 +114,13 @@ function initialize() {
     createTranslation(markerRoot1, lang["du"], "du", languages);
     createTranslation(markerRoot1, lang["wv"], "wv", languages);
 
-    var geometry = new THREE.PlaneGeometry(3, 1.75, 32);
+    var geometry = new THREE.PlaneGeometry(6, 3.5, 32);
     var material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
     var plane = new THREE.Mesh(geometry, material);
 
     plane.rotation.x = -1.56;
-    plane.position.x = 1.0;
-    plane.position.z = 0.375;
+    plane.position.x = 2.0;
+    plane.position.z = 0.75;
 
     markerRoot1.add(plane)
     //createItem(markerRoot1, lang["nl"]);
@@ -137,7 +137,7 @@ function createTranslation(markerRoot, text, key, dictionary) {
 
         text_mesh = new TextWrapper().Wrap({
             string: text,
-            size: .08,
+            size: .16,
             font: font,
             color: 0x000000,
             lineLength: 50,
@@ -152,8 +152,8 @@ function createTranslation(markerRoot, text, key, dictionary) {
 
         text_mesh.position.y = 0.05;
         text_mesh.rotation.x = -1.56;
-        text_mesh.position.z = -0.25;
-        text_mesh.position.x = -0.25;
+        text_mesh.position.z = -0.5;
+        text_mesh.position.x = -0.5;
 
         markerRoot.add(text_mesh);
         text_mesh.visible = false;
