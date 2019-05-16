@@ -7,6 +7,8 @@ var markerRoot1, markerRoot2, markerRoot3;
 
 var mesh1;
 
+var languages;
+
 initialize();
 animate();
 
@@ -104,11 +106,63 @@ function initialize() {
     let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
         type: 'pattern', patternUrl: "hiro.patt",
     })*/
+    languages = {};
+    createTranslation(markerRoot1, lang["nl"], "nl", languages);
+    createTranslation(markerRoot1, lang["en"], "en", languages);
+    createTranslation(markerRoot1, lang["fr"], "fr", languages);
+    createTranslation(markerRoot1, lang["gr"], "gr", languages);
+    createTranslation(markerRoot1, lang["du"], "du", languages);
+    createTranslation(markerRoot1, lang["wv"], "wv", languages);
 
-    createItem(markerRoot1, data[0]);
-    createItem(markerRoot2, data[1]);
-    createItem(markerRoot3, data[2]);
+    var geometry = new THREE.PlaneGeometry(3, 1.75, 32);
+    var material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+    var plane = new THREE.Mesh(geometry, material);
 
+    plane.rotation.x = -1.56;
+    plane.position.x = 1.0;
+    plane.position.z = 0.375;
+
+    markerRoot1.add(plane)
+    //createItem(markerRoot1, lang["nl"]);
+    //createItem(markerRoot2, data[1]);
+    //createItem(markerRoot3, data[2]);
+
+}
+
+function createTranslation(markerRoot, text, key, dictionary) {
+    var text_mesh;
+    var loader = new THREE.FontLoader();
+
+    loader.load('font.json', function (font) {
+
+        text_mesh = new TextWrapper().Wrap({
+            string: text,
+            size: .08,
+            font: font,
+            color: 0x000000,
+            lineLength: 50,
+            height: .01,
+            coords: {
+                x: 0,
+                y: 0,
+                z: 0
+            }
+        });
+
+
+        text_mesh.position.y = 0.05;
+        text_mesh.rotation.x = -1.56;
+        text_mesh.position.z = -0.25;
+        text_mesh.position.x = -0.25;
+
+        markerRoot.add(text_mesh);
+        text_mesh.visible = false;
+        if (key === "nl") {
+            curLanguageTxt = text_mesh;
+            curLanguageTxt.visible = true;
+        }
+        dictionary[key] = text_mesh;
+    });
 }
 
 function createItem(markerRoot, item) {
@@ -119,8 +173,8 @@ function createItem(markerRoot, item) {
 
         title_geom = new THREE.TextGeometry(item.title, {
             font: font,
-            size: .4,
-            height: .05,
+            size: .2,
+            height: .025,
             curveSegments: 12,
             bevelEnabled: false
         });
@@ -139,13 +193,17 @@ function createItem(markerRoot, item) {
         center.x = (title_geom.boundingBox.max.x - title_geom.boundingBox.min.x) / 2
         center.z = (title_geom.boundingBox.max.z - title_geom.boundingBox.min.z) / 2
 
+        var x_max = title_geom.boundingBox.max.x;
+        var z_max = title_geom.boundingBox.max.z;
+
         title_geom = new THREE.BufferGeometry().fromGeometry(title_geom);
 
         // create a mesh with it
         title_mesh = new THREE.Mesh(title_geom, material1)
-        title_mesh.position.y = 0.5;
+        title_mesh.position.y = 0.05;
+        title_mesh.position.x = -x_max;
         title_mesh.rotation.x = -1.56;
-        title_mesh.position.z = center.z;
+        title_mesh.position.z = -z_max;
 
         body_mesh = new TextWrapper().Wrap({
             string: item.description,
@@ -162,7 +220,7 @@ function createItem(markerRoot, item) {
         });
 
 
-        body_mesh.position.y = 0.5;
+        body_mesh.position.y = 0.05;
         body_mesh.rotation.x = -1.56;
         body_mesh.position.z = 10 * center.z;
 
@@ -172,17 +230,27 @@ function createItem(markerRoot, item) {
         markerRoot.add(body_mesh);
 
 
-        var geometry = new THREE.PlaneGeometry(4, 4, 32);
+        var geometry = new THREE.PlaneGeometry(6, 2, 32);
         var material = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
         var plane = new THREE.Mesh(geometry, material);
+
+
+
         plane.rotation.x = -1.56;
-        plane.position.x = 1.5;
-        plane.position.z = 1;
+        plane.position.x = 2.5;
+        plane.position.z = 0.5;
 
         markerRoot.add(plane)
     });
 }
 
+var curLanguageTxt;
+
+function changeLanguage(selected) {
+    curLanguageTxt.visible = false;
+    curLanguageTxt = languages[selected];
+    curLanguageTxt.visible = true;
+}
 
 function update() {
     // update artoolkit on every frame
@@ -206,9 +274,7 @@ function animate() {
 var title_mesh, body_mesh;
 var curscale = 1
 function scaleDown() {
-    console.log(title_mesh.rotation)
-    curscale -= 0.001
-    title_mesh.scale.set(curscale, curscale, curscale)
+    languages["nl"].visible = !languages["nl"].visible;
 }
 window.onkeydown = function (e) {
     if (e.key == "ArrowDown") {
