@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2020 Theo Dedeken
+//
+// SPDX-License-Identifier: MIT
+
 var data = [
     {
         "title": "In 198heftGsud,TomaWijrgkcv.Eplbwz",

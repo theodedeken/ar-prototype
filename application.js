@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2020 Theo Dedeken
+//
+// SPDX-License-Identifier: MIT
+
 console.log(data)
 var scene, camera, renderer, clock, deltaTime, totalTime;
 

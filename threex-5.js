@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2020 three.js authors
+//
+// SPDX-License-Identifier: MIT
+
 var ARjs = ARjs || {}
 var THREEx = THREEx || {}
 

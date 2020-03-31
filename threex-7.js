@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2020 three.js authors
+//
+// SPDX-License-Identifier: MIT
+
 // ** James Burnell. jamesaburnell@gmail.com ********************************
 
 function TextWrapper() {
