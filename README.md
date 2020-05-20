@@ -6,8 +6,8 @@ SPDX-License-Identifier: CC0-1.0
 
 # ar-prototype
 
-[![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
-![REUSE compliant](https://github.com/theodedeken/ar-prototype/workflows/REUSE%20compliant/badge.svg)
+[![standard-readme compliant](https://img.shields.io/badge/standard--readme-OK-green.svg?style=for-the-badge)](https://github.com/RichardLitt/standard-readme)
+[![REUSE compliant](https://img.shields.io/github/workflow/status/theodedeken/ar-prototype/REUSE%20compliant?label=REUSE%20compliant&style=for-the-badge)](https://reuse.software/)
 
 Proof of concept to use AR to provide labels and translations to museum pieces
 
